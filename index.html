@@ -2,13 +2,16 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>IA Expert - Système Intelligent</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroScholar - IA Éducative</title>
     <style>
         :root {
-            --primary: #2A2F4F;
-            --secondary: #917FB3;
-            --accent: #E9A6FF;
-            --background: radial-gradient(circle at top, #1a1a2e 0%, #16213e 100%);
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --background: radial-gradient(circle at top, #16213e 0%, #0f172a 100%);
         }
 
         * {
@@ -20,294 +23,400 @@
 
         body {
             background: var(--background);
+            color: var(--light);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header GitHub Optimized */
+        .header {
+            padding: 1.5rem;
+            text-align: center;
+            background: rgba(26, 26, 46, 0.9);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .title {
+            font-size: 2rem;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Système d'éducation amélioré */
+        .education-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(30, 41, 59, 0.98);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        .education-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .education-title {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
             color: white;
-            height: 100vh;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .education-form {
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            gap: 1rem;
         }
 
-        /* Interface principale */
-        .main-container {
-            flex: 1;
-            max-width: 1200px;
-            margin: 20px auto;
-            width: 95%;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
-        /* Historique des messages */
-        .chat-history {
-            height: 70vh;
-            padding: 25px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--secondary) transparent;
+        .form-label {
+            font-weight: 600;
+        }
+
+        .form-input {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+            display: none;
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
 
         .message {
-            margin: 15px 0;
-            padding: 18px;
-            border-radius: 15px;
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 1rem;
             max-width: 80%;
-            position: relative;
-            animation: messageAppear 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            transition: transform 0.2s;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .user-message {
             background: var(--primary);
             margin-left: auto;
-            border-bottom-right-radius: 3px;
+            border-bottom-right-radius: 0.25rem;
         }
 
         .bot-message {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom-left-radius: 3px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-bottom-left-radius: 0.25rem;
         }
 
-        /* Zone de saisie */
-        .input-container {
+        /* Input Area */
+        .input-area {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.95);
             display: flex;
-            gap: 15px;
-            padding: 25px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 0.5rem;
         }
 
         #user-input {
             flex: 1;
-            padding: 18px;
-            border: none;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.07);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
             color: white;
-            font-size: 1.1em;
-            transition: all 0.3s;
         }
 
-        #user-input:focus {
-            outline: 2px solid var(--accent);
-            box-shadow: 0 0 25px rgba(233, 166, 255, 0.2);
-        }
-
-        .send-btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(145, 127, 179, 0.4);
-        }
-
-        /* Panneau de correction */
-        .correction-panel {
-            position: fixed;
-            bottom: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(40, 40, 70, 0.98);
-            padding: 25px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 600px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
-            opacity: 0;
-            transition: all 0.3s ease-out;
-        }
-
-        .correction-panel.active {
-            opacity: 1;
-            bottom: 130px;
-        }
-
-        /* Icône d'aide animée */
-        .help-icon {
-            position: fixed;
-            bottom: 80px;
-            right: 30px;
-            cursor: pointer;
-            font-size: 2.5em;
-            filter: drop-shadow(0 0 10px rgba(233, 166, 255, 0.4));
-            animation: pulse 2s infinite;
-            transition: transform 0.3s;
-        }
-
-        .help-icon:hover {
-            transform: rotate(15deg) scale(1.1);
-        }
-
-        /* Animations */
-        @keyframes messageAppear {
-            from { opacity: 0; transform: translateY(30px) scale(0.9); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        /* Mobile Optimization */
+        @media (max-width: 600px) {
+            .message {
+                max-width: 90%;
+                padding: 0.75rem;
+            }
+            
+            .input-area {
+                flex-direction: column;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="chat-history" id="chatHistory"></div>
-        
-        <div class="input-container">
-            <input type="text" id="user-input" placeholder="Votre question technique...">
-            <button class="send-btn" onclick="processQuestion()">Envoyer</button>
+    <header class="header">
+        <h1 class="title">NeuroScholar</h1>
+        <p>IA Éducative avec Apprentissage Automatique</p>
+    </header>
+
+    <main class="chat-container" id="chatContainer">
+        <!-- Messages will appear here -->
+    </main>
+
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Posez votre question..." autocomplete="off">
+        <button class="btn btn-primary" onclick="sendMessage()">Envoyer</button>
+        <button class="btn btn-secondary" onclick="showEducationPanel()">Éduquer</button>
+    </div>
+
+    <!-- Système d'Éducation Amélioré -->
+    <div class="overlay" id="overlay"></div>
+    <div class="education-panel" id="educationPanel">
+        <div class="education-header">
+            <h2 class="education-title">Mode Enseignement</h2>
+            <button class="close-btn" onclick="hideEducationPanel()">×</button>
+        </div>
+        <div class="education-form">
+            <div class="form-group">
+                <label for="eduQuestion" class="form-label">Question/Thème :</label>
+                <input type="text" id="eduQuestion" class="form-input" placeholder="Quelle est la capitale de la France?">
+            </div>
+            <div class="form-group">
+                <label for="eduAnswer" class="form-label">Réponse Détaillée :</label>
+                <textarea id="eduAnswer" class="form-input form-textarea" placeholder="La capitale de la France est Paris..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="eduKeywords" class="form-label">Mots-Clés (séparés par des virgules) :</label>
+                <input type="text" id="eduKeywords" class="form-input" placeholder="capitale, France, ville, Paris">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="hideEducationPanel()">Annuler</button>
+                <button class="btn btn-primary" onclick="saveKnowledgeItem()">Enregistrer</button>
+            </div>
         </div>
     </div>
 
-    <div class="correction-panel" id="correctionPanel">
-        <h3>📚 Enseigner une nouvelle réponse</h3>
-        <div class="question-preview" id="currentQuestion"></div>
-        <textarea id="correctionInput" rows="4" 
-                  placeholder="Rédigez la réponse experte..."
-                  class="expert-textarea"></textarea>
-        <button class="send-btn" onclick="validateCorrection()">Mémoriser</button>
-    </div>
-
-    <div class="help-icon" id="helpIcon" onclick="toggleCorrectionPanel()">🕶</div>
-
     <script>
-        // Base de connaissances initiale
-        const expertBase = {
-            "laser sphampins": "Technique de polissage laser utilisant des impulsions femtosecondes",
-            "sous base de données": "Structure partitionnée avec indexation multidimensionnelle",
-            "numéro du groupe": "Identifiant unique format : GXX-YYYY-MM",
-            "délai de réponse": "72h pour les demandes complexes (norme ISO 27001)",
-            "phasers pertinente": "Analyse de phase par transformée de Fourier discrète"
+        // Base de Connaissances Avancée
+        let knowledgeBase = {
+            "bonjour": {
+                answer: "Bonjour ! Je suis NeuroScholar, comment puis-je vous aider ?",
+                keywords: ["salut", "coucou", "hello"],
+                examples: ["Bonjour", "Salut toi", "Hello"]
+            },
+            "aide": {
+                answer: "Je peux répondre à vos questions et apprendre de nouvelles choses. Utilisez le bouton 'Éduquer' pour m'enseigner !",
+                keywords: ["help", "assistance", "soutien"],
+                examples: ["Je besoin d'aide", "Comment ça marche ?"]
+            }
         };
 
-        let currentUnknown = "";
-        const STORAGE_KEY = "ExpertSystemDB";
-
-        // Initialisation
-        function initSystem() {
-            if(!localStorage.getItem(STORAGE_KEY)) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(expertBase));
+        // Chargement des Données
+        function loadKnowledge() {
+            const saved = localStorage.getItem('neuroScholar_knowledge');
+            if (saved) {
+                knowledgeBase = JSON.parse(saved);
             }
-            renderWelcomeMessage();
         }
 
-        // Gestion des messages
-        function createMessageElement(content, isUser) {
-            const div = document.createElement('div');
-            div.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-            
-            const contentHTML = `
-                <div class="message-content">${content}</div>
-                <div class="message-meta">
-                    <span>${new Date().toLocaleTimeString()}</span>
-                    ${!isUser ? '<span class="ai-tag">IA Expert</span>' : ''}
-                </div>
-            `;
-            
-            div.innerHTML = contentHTML;
-            return div;
+        // Sauvegarde des Données
+        function saveKnowledge() {
+            localStorage.setItem('neuroScholar_knowledge', JSON.stringify(knowledgeBase));
         }
 
-        // Processus des questions
-        function processQuestion() {
+        // Gestion de l'Interface
+        function showEducationPanel() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('educationPanel').style.display = 'block';
+            document.getElementById('eduQuestion').focus();
+        }
+
+        function hideEducationPanel() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('educationPanel').style.display = 'none';
+        }
+
+        // Ajout de Message
+        function addMessage(text, isUser) {
+            const container = document.getElementById('chatContainer');
+            const message = document.createElement('div');
+            message.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            message.textContent = text;
+            container.appendChild(message);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Analyse Sémantique Avancée
+        function analyzeQuestion(question) {
+            const lowerQ = question.toLowerCase().trim();
+            
+            // 1. Recherche Exacte
+            if (knowledgeBase[lowerQ]) {
+                return knowledgeBase[lowerQ].answer;
+            }
+            
+            // 2. Recherche par Similarité
+            const words = lowerQ.split(/\s+/);
+            let bestMatch = null;
+            let bestScore = 0;
+            
+            for (const [key, data] of Object.entries(knowledgeBase)) {
+                let score = 0;
+                
+                // Vérification des Mots-Clés
+                if (data.keywords) {
+                    const keywords = data.keywords.join(' ').toLowerCase().split(/,\s*/);
+                    for (const word of words) {
+                        if (keywords.some(kw => kw.includes(word) || word.includes(kw))) {
+                            score += 2;
+                        }
+                    }
+                }
+                
+                // Vérification des Exemples
+                if (data.examples) {
+                    for (const example of data.examples) {
+                        const exampleWords = example.toLowerCase().split(/\s+/);
+                        const commonWords = words.filter(w => exampleWords.includes(w));
+                        score += commonWords.length;
+                    }
+                }
+                
+                // Meilleure Correspondance
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMatch = data.answer;
+                }
+            }
+            
+            return bestScore >= 3 ? bestMatch : null;
+        }
+
+        // Enregistrement d'une Nouvelle Connaissance
+        function saveKnowledgeItem() {
+            const question = document.getElementById('eduQuestion').value.trim();
+            const answer = document.getElementById('eduAnswer').value.trim();
+            const keywords = document.getElementById('eduKeywords').value.split(',').map(k => k.trim()).filter(k => k);
+            
+            if (!question || !answer) {
+                alert("Veuillez remplir au moins la question et la réponse");
+                return;
+            }
+            
+            knowledgeBase[question.toLowerCase()] = {
+                answer: answer,
+                keywords: keywords,
+                examples: generateExamples(question)
+            };
+            
+            saveKnowledge();
+            hideEducationPanel();
+            addMessage("Nouvelle connaissance enregistrée avec succès !", false);
+            
+            // Reset du formulaire
+            document.getElementById('eduQuestion').value = '';
+            document.getElementById('eduAnswer').value = '';
+            document.getElementById('eduKeywords').value = '';
+        }
+
+        // Génération d'Exemples
+        function generateExamples(question) {
+            const examples = [question];
+            const variations = [
+                question + " ?",
+                "Pouvez-vous me dire " + question.toLowerCase(),
+                "Je voudrais savoir " + question.toLowerCase()
+            ];
+            return examples.concat(variations.slice(0, 2));
+        }
+
+        // Envoi de Message
+        function sendMessage() {
             const input = document.getElementById('user-input');
             const question = input.value.trim();
-            if(!question) return;
-
-            const chatHistory = document.getElementById('chatHistory');
-            chatHistory.appendChild(createMessageElement(question, true));
+            if (!question) return;
             
-            const knowledgeBase = JSON.parse(localStorage.getItem(STORAGE_KEY));
-            const response = knowledgeBase[question.toLowerCase()];
-
-            setTimeout(() => {
-                if(response) {
-                    chatHistory.appendChild(createMessageElement(response, false));
-                } else {
-                    currentUnknown = question;
-                    document.getElementById('currentQuestion').textContent = `"${question}"`;
-                    showCorrectionPanel();
-                    chatHistory.appendChild(createMessageElement(
-                        '🔍 Analyse en cours... Aucune correspondance trouvée. Cliquez sur 🕶 pour former le système',
-                        false
-                    ));
-                }
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-            }, 800);
-
+            addMessage(question, true);
             input.value = '';
-        }
-
-        // Système de correction
-        function validateCorrection() {
-            const correction = document.getElementById('correctionInput').value.trim();
-            if(!correction) return;
-
-            const knowledgeBase = JSON.parse(localStorage.getItem(STORAGE_KEY));
-            knowledgeBase[currentUnknown.toLowerCase()] = correction;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(knowledgeBase));
-
-            hideCorrectionPanel();
-            document.getElementById('correctionInput').value = '';
             
-            const confirmation = createMessageElement(
-                '✅ Nouvelle connaissance intégrée au système | Mise à jour réussie',
-                false
-            );
-            document.getElementById('chatHistory').appendChild(confirmation);
+            setTimeout(() => {
+                const response = analyzeQuestion(question) || 
+                    "Je ne connais pas la réponse à cette question. Voulez-vous m'enseigner la réponse en utilisant le bouton 'Éduquer' ?";
+                addMessage(response, false);
+            }, 800);
         }
 
-        // Contrôle de l'interface
-        function showCorrectionPanel() {
-            const panel = document.getElementById('correctionPanel');
-            panel.classList.add('active');
-            document.getElementById('helpIcon').style.display = 'none';
-        }
-
-        function hideCorrectionPanel() {
-            document.getElementById('correctionPanel').classList.remove('active');
-            document.getElementById('helpIcon').style.display = 'block';
-        }
-
-        function toggleCorrectionPanel() {
-            const panel = document.getElementById('correctionPanel');
-            panel.classList.toggle('active');
-        }
-
-        // Message de bienvenue animé
-        function renderWelcomeMessage() {
-            const welcomeMessages = [
-                "Système IA Expert initialisé ✅",
-                "Base de connaissances chargée : " + Object.keys(expertBase).length + " entrées",
-                "Prêt pour l'analyse technique"
-            ];
-
-            welcomeMessages.forEach((msg, index) => {
-                setTimeout(() => {
-                    const el = createMessageElement(msg, false);
-                    document.getElementById('chatHistory').appendChild(el);
-                }, index * 800);
+        // Initialisation
+        window.onload = function() {
+            loadKnowledge();
+            addMessage("Bonjour ! Je suis NeuroScholar, posez-moi une question ou enseignez-moi de nouvelles choses.", false);
+            
+            // Gestion des Événements
+            document.getElementById('user-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
             });
-        }
-
-        // Événements
-        document.getElementById('user-input').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') processQuestion();
-        });
-
-        // Démarrage
-        initSystem();
+        };
     </script>
 </body>
 </html>
